@@ -3,3 +3,6 @@ include/
 bin/
 lib/
 **/.DS_Store
+
+!glad/include
+!glfw/include
