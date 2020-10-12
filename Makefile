@@ -17,28 +17,32 @@
 .POSIX:
 .SUFFIXES:
 
-SRC = main.c a.c
+SRC = main.c app.c
 INC = -Ideps/include
 LNK = -Z -L/usr/lib -F/System/Library/Frameworks -Ldeps/lib -lglfw3 -lglad -ldl -framework Cocoa -framework IOKit -framework CoreFoundation
 
-OBJ = $(addprefix build/app/, $(addsuffix .o, $(SRC)))
-DEP = $(addprefix build/app/, $(addsuffix .d, $(SRC)))
+OBJ = $(addprefix build/proj/, $(addsuffix .o, $(SRC)))
+DEP = $(addprefix build/proj/, $(addsuffix .d, $(SRC)))
 
-all: app
+all: bin
 
-app: $(OBJ)
-	cc $(OBJ) $(LNK) -o app
+bin: $(OBJ)
+	cc $(OBJ) $(LNK) -o bin
 
-build/app/%.c.o: %.c
-	mkdir -p build/app/$(dir $<)
-	cc -c $(INC) $< -MT $@ -MMD -MP -MF build/app/$<.d -o $@
+build/proj/%.c.o: %.c
+	mkdir -p build/proj/$(dir $<)
+	cc -c $(INC) $< -MT $@ -MMD -MP -MF build/proj/$<.d -o $@
 
-build/app/%.m.o: %.m
-	mkdir -p build/app/$(dir $<)
-	cc -c -ObjC $(INC) $< -MT $@ -MMD -MP -MF build/app/$<.d -o $@
+build/proj/%.m.o: %.m
+	mkdir -p build/proj/$(dir $<)
+	cc -c -ObjC $(INC) $< -MT $@ -MMD -MP -MF build/proj/$<.d -o $@
+
+build/proj/%.cpp.o: %.cpp
+	mkdir -p build/proj/$(dir $<)
+	c++ -c $(INC) $< -MT $@ -MMD -MP -MF build/proj/$<.d -o $@
 
 clean:
-	rm -rf build/app
-	rm -f app
+	rm -rf build/proj
+	rm -f bin
 
 -include $(DEP)

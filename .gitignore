@@ -1,4 +1,4 @@
 build/
 deps/
-app
+bin
 **/.DS_Store

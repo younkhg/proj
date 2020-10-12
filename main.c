@@ -1,4 +1,4 @@
-#include "a.h"
+#include "app.h"
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -9,8 +9,6 @@ void glfwErrCB(int code, const char *description) {
 }
 
 int main(int argc, char **argv) {
-  printf("Hello, World!\n");
-  foo();
   glfwInit();
   glfwSetErrorCallback(glfwErrCB);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -28,6 +26,8 @@ int main(int argc, char **argv) {
   if(!gladLoadGL()) {
     printf("Failed to load OpenGL\n");
   }
+  printf("Hello, World!\n");
+  foo();
   glfwTerminate();
   return 0;
 }
