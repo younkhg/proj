@@ -4,14 +4,19 @@
 #include <glad/glad.h>
 #include <stdio.h>
 
-// Called from platform main
+void glfwErrCB(int code, const char *description) {
+  printf("GLFW error: [%d] %s\n", code, description);
+}
+
 int main(int argc, char **argv) {
   printf("Hello, World!\n");
   foo();
   glfwInit();
+  glfwSetErrorCallback(glfwErrCB);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
   GLFWwindow* window = glfwCreateWindow(512, 512, "", NULL, NULL);
   if (window == NULL)
   {
