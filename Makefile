@@ -17,17 +17,31 @@
 .POSIX:
 .SUFFIXES:
 
-SRC = main.c app.c
-INC = -Ideps/include
-LNK = -Z -L/usr/lib -F/System/Library/Frameworks -Ldeps/lib -lglfw3 -lglad -ldl -framework Cocoa -framework IOKit -framework CoreFoundation
-
+SRC = app.c
+LNK = -Z -L/usr/lib
 OBJ = $(addprefix build/proj/, $(addsuffix .o, $(SRC)))
 DEP = $(addprefix build/proj/, $(addsuffix .d, $(SRC)))
 
-all: bin
+MACGLSRC = main.c
+MACGLLNK = -F/System/Library/Frameworks -Ldeps/lib -lglfw3 -lglad -ldl -framework Cocoa -framework IOKit -framework CoreFoundation
+MACGLOBJ = $(addprefix build/proj/, $(addsuffix .o, $(MACGLSRC)))
+MACGLDEP = $(addprefix build/proj/, $(addsuffix .d, $(MACGLSRC)))
 
-bin: $(OBJ)
-	cc $(OBJ) $(LNK) -o bin
+MACMTSRC = main.m
+MACMTLNK = -F/System/Library/Frameworks -Ldeps/lib -lglfw3 -framework Cocoa -framework IOKit -framework CoreFoundation
+MACMTOBJ = $(addprefix build/proj/, $(addsuffix .o, $(MACMTSRC)))
+MACMTDEP = $(addprefix build/proj/, $(addsuffix .d, $(MACMTSRC)))
+
+INC = -Ideps/include
+
+all:
+	@echo "Need to provide target to build"
+
+macglbin: $(OBJ) $(MACGLOBJ)
+	cc $(OBJ) $(MACGLOBJ) $(LNK) $(MACGLLNK) -o macglbin
+
+macmtbin: $(OBJ) $(MACMTOBJ)
+	cc $(OBJ) $(MACMTOBJ) $(LNK) $(MACMTLNK) -o macmtbin
 
 build/proj/%.c.o: %.c
 	mkdir -p build/proj/$(dir $<)
@@ -43,6 +57,8 @@ build/proj/%.cpp.o: %.cpp
 
 clean:
 	rm -rf build/proj
-	rm -f bin
+	rm -f macglbin macmtbin
 
 -include $(DEP)
+-include $(MACGLDEP)
+-include $(MACMTDEP)

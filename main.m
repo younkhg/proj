@@ -1,7 +1,8 @@
 #include "app.h"
 #define GLFW_INCLUDE_NONE
+#define GLFW_EXPOSE_NATIVE_COCOA
 #include <GLFW/glfw3.h>
-#include <glad/glad.h>
+#include <GLFW/glfw3native.h>
 #include <stdio.h>
 
 static void glfwErrCB(int code, const char *description) {
@@ -17,10 +18,6 @@ static void glfwKeyCB(GLFWwindow *window, int key, int scancode, int action, int
 int main(int argc, char **argv) {
   glfwInit();
   glfwSetErrorCallback(glfwErrCB);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
   GLFWwindow *window = glfwCreateWindow(512, 512, "", NULL, NULL);
   if (window == NULL)
   {
@@ -30,9 +27,7 @@ int main(int argc, char **argv) {
   }
   glfwSetKeyCallback(window, glfwKeyCB);
   glfwMakeContextCurrent(window);
-  if(!gladLoadGL()) {
-    printf("Failed to load OpenGL\n");
-  }
+  NSWindow *nswindow = glfwGetCocoaWindow(window);
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
   }
