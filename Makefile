@@ -28,14 +28,14 @@ MACGLOBJ = $(addprefix build/proj/, $(addsuffix .o, $(MACGLSRC)))
 MACGLDEP = $(addprefix build/proj/, $(addsuffix .d, $(MACGLSRC)))
 
 MACMTSRC = main.m
-MACMTLNK = -F/System/Library/Frameworks -Ldeps/lib -lglfw3 -framework Cocoa -framework IOKit -framework CoreFoundation
+MACMTLNK = -F/System/Library/Frameworks -Ldeps/lib -lglfw3 -framework Cocoa -framework IOKit -framework CoreFoundation -framework Metal -framework MetalKit -framework QuartzCore
 MACMTOBJ = $(addprefix build/proj/, $(addsuffix .o, $(MACMTSRC)))
 MACMTDEP = $(addprefix build/proj/, $(addsuffix .d, $(MACMTSRC)))
 
 INC = -Ideps/include
 
 all:
-	@echo "Need to provide target to build"
+	@echo "Need to provide target to build: [macglbin, macmtbin]"
 
 macglbin: $(OBJ) $(MACGLOBJ)
 	cc $(OBJ) $(MACGLOBJ) $(LNK) $(MACGLLNK) -o macglbin
