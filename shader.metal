@@ -1,28 +1,30 @@
 #include <metal_stdlib>
 using namespace metal;
 
-typedef struct
-{
+struct VertIn {
+    float2 position [[attribute(0)]];
+    float4 color [[attribute(1)]];
+};
+
+struct VertOut {
     float4 position [[position]];
     float4 color;
-} RasterizerData;
+};
 
-vertex RasterizerData vertexShader(
-    uint vertexID [[vertex_id]],
-    constant packed_float3 *vertices [[buffer(0)]])
+vertex VertOut vertexShader(
+    VertIn in [[stage_in]],
+    uint id [[vertex_id]])
 {
-    RasterizerData out = {
-        .position = float4(vertices[vertexID], 1.0),
-        .color = float4(1.0, 0.9, 0.0, 1.0)
+    VertOut out = {
+        .position = float4(in.position, 0.0, 1.0),
+        .color = in.color
     };
     return out;
 }
 
 fragment half4 fragmentShader(
-    RasterizerData in [[stage_in]],
+    VertOut in [[stage_in]],
     constant float *uniforms [[buffer(0)]])
 {
-    float r = uniforms[0];
-    float g = in.color[1];
-    return half4(r, g, 1.0 - r, 1.0);
+    return half4(in.color[0], in.color[1], uniforms[0], 1.0);
 }

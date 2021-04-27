@@ -16,8 +16,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <stddef.h>
 
-#include "app.h"
+#include "common.h"
 
 static void glfwErrCB(int code, const char *description) {
   printf("GLFW error: [%d] %s\n", code, description);
@@ -116,10 +117,21 @@ int main(int argc, char **argv) {
         id<MTLFunction> vertexProgram = [myLibrary newFunctionWithName:@"vertexShader"];
         id<MTLFunction> fragmentProgram = [myLibrary newFunctionWithName:@"fragmentShader"];
 
+        MTLVertexDescriptor* vertexDesc = [[MTLVertexDescriptor alloc] init];
+        vertexDesc.attributes[0].format = MTLVertexFormatFloat2;
+        vertexDesc.attributes[0].bufferIndex = 0;
+        vertexDesc.attributes[0].offset = 0;
+        vertexDesc.attributes[1].format = MTLVertexFormatFloat4;
+        vertexDesc.attributes[1].bufferIndex = 0;
+        vertexDesc.attributes[1].offset = offsetof(struct Vertex2D, color);
+        vertexDesc.layouts[0].stride = sizeof(struct Vertex2D); // Layout for MTLBuffer[0]
+        vertexDesc.layouts[0].stepFunction = MTLVertexStepFunctionPerVertex;
+
         MTLRenderPipelineDescriptor *pipelineDescriptor = [MTLRenderPipelineDescriptor new];
         pipelineDescriptor.vertexFunction = vertexProgram;
         pipelineDescriptor.fragmentFunction = fragmentProgram;
         pipelineDescriptor.colorAttachments[0].pixelFormat = pixelFormat;
+        pipelineDescriptor.vertexDescriptor = vertexDesc;
 
         id<MTLRenderPipelineState> pipelineState = [device newRenderPipelineStateWithDescriptor:pipelineDescriptor error:&err];
         if (!pipelineState) {
@@ -127,12 +139,19 @@ int main(int argc, char **argv) {
             return -1;
         }
 
-        float vertexData[] = {
-            0.0f, 0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f
-        };
+        // float vertexData[] = {
+        //     0.0f, 0.5f, 0.0f,
+        //     -0.5f, -0.5f, 0.0f,
+        //     0.5f, -0.5f, 0.0f
+        // };
+        // NSUInteger dataSize = sizeof(vertexData);
+        // id<MTLBuffer> vertexBuffer = [device newBufferWithBytes:vertexData length:dataSize options:MTLResourceStorageModeShared];
 
+        struct Vertex2D vertexData[] = {
+          { .position = {0.0f, 0.5f}, .color = {1.0f, 0.0f, 0.0f, 1.0f}},
+          { .position = {-0.5f, -0.5f}, .color = {0.0f, 1.0f, 0.0f, 1.0f}},
+          { .position = {0.5f, -0.5f}, .color = {1.0f, 1.0f, 0.0f, 1.0f}}
+        };
         NSUInteger dataSize = sizeof(vertexData);
         id<MTLBuffer> vertexBuffer = [device newBufferWithBytes:vertexData length:dataSize options:MTLResourceStorageModeShared];
 

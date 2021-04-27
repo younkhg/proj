@@ -71,9 +71,18 @@ build/shader.air: shader.metal
 	@mkdir -p build
 	xcrun -sdk macosx metal -c shader.metal -o build/shader.air
 
+test: build/test.c.o
+	$(CC) build/test.c.o -o test
+
+build/test.c.o: test.c
+	@mkdir -p build
+	$(CC) -c test.c -o build/test.c.o
+
+
 clean:
 	rm -rf build
 	rm -f bin
 	rm -f shader.metalib
+	rm -f test
 
 -include $(DEP)

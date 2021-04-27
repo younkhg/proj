@@ -1,6 +1,5 @@
 //
 //  shader.h
-//  CRExamples
 //
 //  Created by keehong youn on 10/30/20.
 //
