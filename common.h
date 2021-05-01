@@ -21,7 +21,16 @@ struct Vertex2D {
   struct F4 color;
 };
 
-
 void foo(void);
+
+static inline struct F2 f2(float x, float y) {
+  struct F2 f = { .x = x, .y = y };
+  return f;
+}
+
+static inline struct F4 f4(float x, float y, float z, float w) {
+  struct F4 f = { .x = x, .y = y , .z = z, .w = w};
+  return f;
+}
 
 #endif
