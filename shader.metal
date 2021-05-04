@@ -2,7 +2,7 @@
 using namespace metal;
 
 struct VertIn {
-    float2 position [[attribute(0)]];
+    float3 position [[attribute(0)]];
     float4 color [[attribute(1)]];
 };
 
@@ -16,7 +16,7 @@ vertex VertOut vertexShader(
     uint id [[vertex_id]])
 {
     VertOut out = {
-        .position = float4(in.position, 0.0, 1.0),
+        .position = float4(in.position, 1.0),
         .color = in.color
     };
     return out;

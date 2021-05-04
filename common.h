@@ -8,6 +8,13 @@ struct F2 {
   };
 };
 
+struct F3 {
+  union {
+    struct { float x, y, z; };
+    struct { float data[3]; };
+  };
+};
+
 struct F4 {
   union {
     struct { float x, y, z, w; };
@@ -21,10 +28,20 @@ struct Vertex2D {
   struct F4 color;
 };
 
+struct Vertex3D {
+  struct F3 position;
+  struct F4 color;
+};
+
 void foo(void);
 
 static inline struct F2 f2(float x, float y) {
   struct F2 f = { .x = x, .y = y };
+  return f;
+}
+
+static inline struct F3 f3(float x, float y, float z) {
+  struct F3 f = { .x = x, .y = y , .z = z};
   return f;
 }
 
