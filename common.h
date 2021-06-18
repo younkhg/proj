@@ -1,6 +1,10 @@
 #ifndef INCLUDE_COMMON_H
 #define INCLUDE_COMMON_H
 
+#define f2(X, Y) (struct F2){ .x = X, .y = Y }
+#define f3(X, Y, Z) (struct F3){ .x = X, .y = Y, .z = Z }
+#define f4(X, Y, Z, W) (struct F4){ .x = X, .y = Y, .z = Z, .w = W }
+
 struct F2 {
   union {
     struct { float x, y; };
@@ -11,6 +15,7 @@ struct F2 {
 struct F3 {
   union {
     struct { float x, y, z; };
+    struct { float r, g, b; };
     struct { float data[3]; };
   };
 };
@@ -34,20 +39,5 @@ struct Vertex3D {
 };
 
 void foo(void);
-
-static inline struct F2 f2(float x, float y) {
-  struct F2 f = { .x = x, .y = y };
-  return f;
-}
-
-static inline struct F3 f3(float x, float y, float z) {
-  struct F3 f = { .x = x, .y = y , .z = z};
-  return f;
-}
-
-static inline struct F4 f4(float x, float y, float z, float w) {
-  struct F4 f = { .x = x, .y = y , .z = z, .w = w};
-  return f;
-}
 
 #endif
